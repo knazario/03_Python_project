@@ -20,18 +20,14 @@ with open(poll_csv) as csv_file:
     candidate_str = []
     win_count = 0
     
-    #for each row, add a tally to votes list for the index that matches/corresponds with the index in candidate list
-    # 4th element in list (votes[3] placed in else in case data has a typo or name program did not have in candidate list  
+    #nested for loop- for each row and loop through candidate list to match and if it finds match, 
+    # add 1 vote to corresponding index location in votes list, add 1 to total votes and break loop to next row
     for row in csvreader:
-        total_votes += 1
-        if row[2] == candidates[0]:
-            votes[0]+= 1
-        elif row[2] == candidates[1]:
-            votes[1]+= 1
-        elif row[2] == candidates[2]:
-            votes[2]+= 1
-        else:
-            votes[3] += 1
+        for i in range(len(candidates)):
+            if row[2] == candidates[i]:
+                votes[i] += 1
+                total_votes += 1
+                break
 
 #for loop iterating through candidates to caluclate percent vote, concatenate candidate strings and compare total votes
 # to store winner name and vote count (vote count used to compare to other candidates in list)
