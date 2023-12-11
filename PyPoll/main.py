@@ -11,45 +11,54 @@ with open(poll_csv) as csv_file:
     # store and skip header row prior to loop
     csv_header = next(csvreader)
 
-    #set variables needed- total votes, list of andidates, vote tally list, percecnt vote list, candidate string list, 
-    # and winer index counter 
+    #set variables needed- total votes, empty dictionary for candidates, winner name string and winner vote count placeholder
     total_votes = 0
-    candidates = ['Charles Casper Stockham','Diana DeGette','Raymon Anthony Doane']
-    votes = [0,0,0]
-    percent_vote = []
-    candidate_str = []
-    win_count = 0
-    
-    #nested for loop- for each row and loop through candidate list to match and if it finds match, 
-    # add 1 vote to corresponding index location in votes list, add 1 to total votes and break loop to next row
-    for row in csvreader:
-        for i in range(len(candidates)):
-            if row[2] == candidates[i]:
-                votes[i] += 1
-                total_votes += 1
-                break
+    candidate_dict = {}
+    winner = ""
+    win_votes = 0
 
-#for loop iterating through candidates to caluclate percent vote, concatenate candidate strings and compare total votes
-# to store winner name and vote count (vote count used to compare to other candidates in list)
-for x in range(len(candidates)):
-    percent_vote.append(round(100*votes[x]/total_votes,3))
-    candidate_str.append(candidates[x]+": "+ str(percent_vote[x]) + "% (" + str(votes[x])+ ")")
-    if votes[x] > win_count: 
-        win_name = candidates[x]
-        win_count = votes[x]
+    #for loop to iterate through each line in read in csv file (without header)
+    for row in csvreader:
+        #increases total vote count by 1 
+        total_votes += 1 
+       
+        # if current row value (candidate name) does not exist in our dictionary, 
+        # create a new key and assign value of 1(1st vote)
+        if row[2] not in candidate_dict:
+            candidate_dict[row[2]] = 1
+       
+        #else (candidate already in dictionary), increase value by 1 (increase vote count)
+        else:
+                candidate_dict[row[2]] += 1
 
 #set path for output analysis text file
 poll_txt = os.path.join("Analysis", "PyPoll_analysis.txt")
-# store lines in a list for terminal and text output 
-printout = ['\nElection Results', '-------------------------------------',
-         'Total Votes: '+ str(total_votes), '-------------------------------------',
-          candidate_str[0],candidate_str[1],candidate_str[2], '-------------------------------------',
-          'Winner: ' + win_name,
-          '-------------------------------------',
-          ]
-#for each line, write line with additional line breaks on text file and then print same info to the terminal
+
+#open text file to write summary info
 with open(poll_txt, 'w') as txt:
-    for line in printout:
-        txt.write(line)
-        txt.write('\n\n')
-        print(line + '\n')
+    #print opening formatting and total votes to termainal and text file
+    print(f'\nElection Results\n-------------------------------------\n'+
+          f'Total Votes: {total_votes}\n-------------------------------------')
+    
+    txt.write(f'\nElection Results\n-------------------------------------\n'+
+                    f'Total Votes: {total_votes}\n-------------------------------------\n')
+         
+    # For loop that for each key_value(candidate) in dictionary
+    for key in candidate_dict:    
+       #calculate percent of votes by dividing value associated with key (votes) with total votes
+        percent_vote = round(((candidate_dict[key]/total_votes)*100),3)
+      
+        #print string of Name, percent vote and vote count and write same info to text file
+        print(f'{key}: {percent_vote}% ({candidate_dict[key]})\n' )
+        txt.write(f'{key}: {percent_vote}% ({candidate_dict[key]})\n')
+      
+       # if current value(votes) is greater than stored winning vote count, replace name and vote count with current values
+        if candidate_dict[key] > win_votes:
+            win_name = key
+            win_votes = candidate_dict[key]
+
+   #print Winner of election to terminal and write to text file 
+    print(f'-------------------------------------\nWinner: {win_name}'+
+          f'\n-------------------------------------')
+    txt.write(f'-------------------------------------\nWinner: {win_name}'+
+          f'\n-------------------------------------')
