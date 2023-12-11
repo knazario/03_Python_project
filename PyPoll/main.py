@@ -15,7 +15,7 @@ with open(poll_csv) as csv_file:
     # and winer index counter 
     total_votes = 0
     candidates = ['Charles Casper Stockham','Diana DeGette','Raymon Anthony Doane']
-    votes = [0,0,0,0]
+    votes = [0,0,0]
     percent_vote = []
     candidate_str = []
     win_count = 0
