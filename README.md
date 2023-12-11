@@ -1,6 +1,6 @@
 # 3_Python_project
 
-This folder contains 2 different pyton projects. PyBank reads in csv data with monthly profits/losses over time and conducts analysis of the data to output to the terminal and text file (stored in Analysis folder). PyPoll reads in voting data for a local election and does analysis to determine the proportion of vote for each candidate and disply summary with winner (popular vote). 
+This folder contains 2 different python projects. PyBank reads in csv data with monthly profits/losses over time and conducts analysis of the data to output to the terminal and text file (stored in Analysis folder). PyPoll reads in voting data for a local election and does analysis to determine the proportion of vote for each candidate and disply summary with winner (popular vote). 
 
 
 Code Sources: 
